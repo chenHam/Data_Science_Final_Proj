@@ -1,10 +1,7 @@
 import os
 import pandas as pd
 from pathlib import Path
-import requests
-import json
-from pandas.io.json import json_normalize
-
+import datetime
 
 # constant string values
 directoryName = 'data'
@@ -12,7 +9,9 @@ apiKey = '4YDREM9NQ9TXEHYE';
 baseRequestString = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&' \
                     'symbol={0}&outputsize={1}&apikey={2}&datatype=csv'
 
-# comment
+# params: ticker_name and time range(default = ''),
+# if time range is 'full': gets all historical data, otherwise gets previous 100 days
+# if data already exists, doesn't fetch it again
 def fetch_ticker(ticker_name,timerange=''):
     if not Path(pathOfTicker(ticker_name)).exists():
         # default range value
@@ -35,15 +34,35 @@ def fetch_ticker(ticker_name,timerange=''):
         else:
             raise Exception('Error fetching ticker: ' + ticker_name +', ticker does not exists.')
 
-
+# returns data for the given ticker_name, time range, data_type (=columns to read)
 def get_data_for_ticker_in_range(ticker_name,from_date,to_date, data_type):
-    print()
+    # get path to ticker
+    tickerPath = pathOfTicker(ticker_name)
+
+    # if data for the ticker does not exist, fetch it
+    if not Path(tickerPath).exists():
+        fetch_ticker(ticker_name)
+
+    # read to csv
+    tickerDF = pd.read_csv(tickerPath)
+
+    # convert timestamp column to datetime
+    tickerDF['timestamp'] = pd.to_datetime(tickerDF['timestamp'])
+
+    # filter rows in the given range
+    in_range_df = tickerDF[tickerDF["timestamp"].isin(pd.date_range(from_date, to_date))]
+
+    if in_range_df.empty or not set(data_type).issubset(tickerDF.columns):
+        raise Exception('Invalid parameters, or no data in the given range')
+
+    return in_range_df[data_type]
+
+
 
 
 def get_profit_for_ticker_in_range(ticker_name,from_date,to_date,
 accumulated=False):
     print()
-
 
 def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
     print()
@@ -54,7 +73,7 @@ def save_ticker_data_file(ticker_name, df):
         Path(directoryName).mkdir()
 
     # save the dataframe as csv to data directory
-    df.to_csv(pathOfTicker(ticker_name))
+    df.to_csv(pathOfTicker(ticker_name), index=False)
 
 # return 'data/TICKER_NAME.csv'
 def pathOfTicker(ticker_name):
@@ -64,4 +83,8 @@ def pathOfTicker(ticker_name):
 def check_df_valid(tickerDF):
     return "Error Message" not in tickerDF.values[0][0]
 
-fetch_ticker('AAPL')
+#fetch_ticker('AAPL')
+day1 = datetime.datetime(2018, 3, 21)
+day2 = datetime.datetime(2018, 3, 20)
+
+get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
