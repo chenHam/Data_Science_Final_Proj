@@ -1,10 +1,39 @@
 import os
 import pandas as pd
+from pathlib import Path
+import requests
+import json
+from pandas.io.json import json_normalize
 
+
+# constant string values
+directoryName = 'data'
+apiKey = '4YDREM9NQ9TXEHYE';
+baseRequestString = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&' \
+                    'symbol={0}&outputsize={1}&apikey={2}&datatype=csv'
 
 # comment
-def fetch_ticker(ticker_name,timerange):
-    print()
+def fetch_ticker(ticker_name,timerange=''):
+    if not Path(pathOfTicker(ticker_name)).exists():
+        # default range value
+        range = 'compact'
+
+        # if range is 'full', get all historical data
+        if timerange == 'full':
+            range = 'full'
+
+        # format base string to formatted string with the given params
+        formattedAPIUrl = baseRequestString.format(ticker_name, range, apiKey)
+
+        # read csv from the url, using pandas
+        tickerDF = pd.read_csv(formattedAPIUrl)
+
+        if check_df_valid(tickerDF):
+
+            # save the data frame to csv file in the data directory
+            save_ticker_data_file(ticker_name, tickerDF)
+        else:
+            raise Exception('Error fetching ticker: ' + ticker_name +', ticker does not exists.')
 
 
 def get_data_for_ticker_in_range(ticker_name,from_date,to_date, data_type):
@@ -19,4 +48,20 @@ accumulated=False):
 def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
     print()
 
+def save_ticker_data_file(ticker_name, df):
+    # creates data directory if not exists
+    if not Path(directoryName).exists():
+        Path(directoryName).mkdir()
 
+    # save the dataframe as csv to data directory
+    df.to_csv(pathOfTicker(ticker_name))
+
+# return 'data/TICKER_NAME.csv'
+def pathOfTicker(ticker_name):
+    return os.path.join(directoryName, ticker_name.upper() + '.csv')
+
+# return if dataframe containing error message
+def check_df_valid(tickerDF):
+    return "Error Message" not in tickerDF.values[0][0]
+
+fetch_ticker('AAPL')
