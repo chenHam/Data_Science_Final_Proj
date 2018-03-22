@@ -58,11 +58,20 @@ def get_data_for_ticker_in_range(ticker_name,from_date,to_date, data_type):
     return in_range_df[data_type]
 
 
-
-
 def get_profit_for_ticker_in_range(ticker_name,from_date,to_date,
 accumulated=False):
-    print()
+    in_range_df = get_data_for_ticker_in_range(ticker_name, from_date, to_date, ['timestamp', 'close'])
+    in_range_df['ticker_name'] = ticker_name.upper()
+    in_range_df['daily_profit'] = in_range_df['close'] / in_range_df['close'].shift(1)
+
+    # if accumulated profit is required
+    if accumulated:
+        in_range_df['daily_profit'] = in_range_df['daily_profit'].cumsum()
+
+    print(in_range_df[['timestamp', 'ticker_name', 'daily_profit']])
+
+    # return only the required columns
+    return in_range_df[['timestamp', 'ticker_name', 'daily_profit']]
 
 def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
     print()
@@ -83,8 +92,14 @@ def pathOfTicker(ticker_name):
 def check_df_valid(tickerDF):
     return "Error Message" not in tickerDF.values[0][0]
 
+# 1st func
 #fetch_ticker('AAPL')
-day1 = datetime.datetime(2018, 3, 21)
-day2 = datetime.datetime(2018, 3, 20)
 
-get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
+# 2nd func
+day1 = datetime.datetime(2018, 3, 21)
+day2 = datetime.datetime(2018, 1, 20)
+# get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
+
+# 3rd func
+get_profit_for_ticker_in_range('AAPL', day2, day1)
+
