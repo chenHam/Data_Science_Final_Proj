@@ -73,8 +73,36 @@ accumulated=False):
     # return only the required columns
     return in_range_df[['timestamp', 'ticker_name', 'daily_profit']]
 
+    #todo handle exception
+
 def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
-    print()
+    in_range_df = get_data_for_ticker_in_range(ticker_name, from_date, to_date, ['timestamp', 'close'])
+
+    print(in_range_df)
+    print(in_range_df['close'].max())
+    print(in_range_df['close'].idxmax())
+    peak_close = in_range_df['close'].max()
+    peak_close_idx = in_range_df['close'].idxmax()
+
+    after_peak_df = in_range_df[:peak_close_idx]
+    print(after_peak_df)
+
+    valley_close = after_peak_df['close'].min()
+    valley_close_idx = after_peak_df['close'].idxmin()
+
+
+    day_diff = peak_close_idx - valley_close_idx
+
+    print('peakClose: ' + str(peak_close))
+    print('peakCloseIdx: ' + str(peak_close_idx))
+    print('valleyClose: ' + str(valley_close))
+    print('valleyCloseIdx: ' + str(valley_close_idx))
+    print('dayDiff: ' + str(day_diff))
+
+    peak_to_valley = peak_close - valley_close
+
+    return peak_to_valley, peak_close, valley_close, day_diff
+
 
 def save_ticker_data_file(ticker_name, df):
     # creates data directory if not exists
@@ -101,5 +129,8 @@ day2 = datetime.datetime(2018, 1, 20)
 # get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
 
 # 3rd func
-get_profit_for_ticker_in_range('AAPL', day2, day1)
+#get_profit_for_ticker_in_range('AAPL', day2, day1)
+
+# 4th func
+get_p2v_for_ticker_in_range('AAPL', day2, day1)
 
