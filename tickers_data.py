@@ -2,8 +2,9 @@ import os
 import pandas as pd
 
 
-# comment
-def fetch_ticker(ticker_name,timerange):
+# get ticker from api
+def fetch_ticker(ticker_name,timerange=''):
+    #get data
     print()
 
 
