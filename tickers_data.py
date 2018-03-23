@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from pathlib import Path
+import numpy as np
 
 # constant string values
 directoryName = 'data'
@@ -36,7 +37,15 @@ def fetch_ticker(ticker_name, timerange=''):
 
 
 # returns data for the given ticker_name, time range, data_type (=columns to read)
-def get_data_for_ticker_in_range(ticker_name, from_date, to_date, data_type):
+def get_data_for_ticker_in_range(ticker_name, from_date_str, to_date_str, data_type):
+
+    # try converting dates to datetime type, raise exception on failure
+    try:
+        from_date = pd.to_datetime(from_date_str)
+        to_date = pd.to_datetime(to_date_str)
+    except ValueError:
+        raise Exception('Invalid date or date format')
+
     # get path to ticker
     tickerPath = pathOfTicker(ticker_name)
 
@@ -59,51 +68,67 @@ def get_data_for_ticker_in_range(ticker_name, from_date, to_date, data_type):
     return in_range_df[data_type]
 
 
-def get_profit_for_ticker_in_range(ticker_name, from_date, to_date, accumulated=False):
+def get_profit_for_ticker_in_range(ticker_name, from_date_str, to_date_str, accumulated=False):
+    # try converting dates to datetime type, raise exception on failure
+    try:
+        from_date = pd.to_datetime(from_date_str)
+        to_date = pd.to_datetime(to_date_str)
+    except ValueError:
+        raise Exception('Invalid date or date format')
+
+    # gets data for the given ticker in the given range
     in_range_df = get_data_for_ticker_in_range(ticker_name, from_date, to_date, ['timestamp', 'close'])
+
+    # create column 'ticker_name' containing the given ticker_name
     in_range_df['ticker_name'] = ticker_name.upper()
+
+    # calculates the daily profit by using another df with shift(1)
     in_range_df['daily_profit'] = in_range_df['close'] / in_range_df['close'].shift(1)
 
     # if accumulated profit is required
     if accumulated:
         in_range_df['daily_profit'] = in_range_df['daily_profit'].cumsum()
 
-    # print(in_range_df[['timestamp', 'ticker_name', 'daily_profit']])
-
-    # return only the required columns
+    # returns only the required columns
     return in_range_df[['timestamp', 'ticker_name', 'daily_profit']]
 
-    #todo handle exception
+# params: ticker_name, time range
+# return: peak_to_valley, peak, valley
+def get_p2v_for_ticker_in_range(ticker_name, from_date, to_date):
 
-def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
+    # get data in range for the given ticker
     in_range_df = get_data_for_ticker_in_range(ticker_name, from_date, to_date, ['timestamp', 'close'])
 
-    # print(in_range_df)
-    # print(in_range_df['close'].max())
-    # print(in_range_df['close'].idxmax())
+    # find peak value for 'close' field
     peak_close = in_range_df['close'].max()
+
+    # find the index of the peak
     peak_close_idx = in_range_df['close'].idxmax()
 
-    after_peak_df = in_range_df[:peak_close_idx]
-    # print(after_peak_df)
+    # remove all rows after the peak index
+    after_peak_df = in_range_df[:peak_close_idx+1]
 
+    # find the valley (minimal closing value) after the peak
     valley_close = after_peak_df['close'].min()
+
+    # find the index of the valley
     valley_close_idx = after_peak_df['close'].idxmin()
 
+    # calculates the day difference between the peak and the valley
+    valley_date = after_peak_df['timestamp'].values[valley_close_idx]
+    peak_date = after_peak_df['timestamp'].values[peak_close_idx]
 
-    day_diff = peak_close_idx - valley_close_idx
+    # convert datetimedelta to days integer
+    day_diff = (valley_date - peak_date) / np.timedelta64(1, 'D')
 
-    # print('peakClose: ' + str(peak_close))
-    # print('peakCloseIdx: ' + str(peak_close_idx))
-    # print('valleyClose: ' + str(valley_close))
-    # print('valleyCloseIdx: ' + str(valley_close_idx))
-    # print('dayDiff: ' + str(day_diff))
-
+    # calculates the difference in value of the peak and the valley
     peak_to_valley = peak_close - valley_close
 
+    # return the calculated values
     return peak_to_valley, peak_close, valley_close, day_diff
 
-
+# gets ticker_name and dataframe
+# creates a csv file with the ticker_name from the data frame
 def save_ticker_data_file(ticker_name, df):
     # creates data directory if not exists
     if not Path(directoryName).exists():
@@ -124,13 +149,13 @@ def check_df_valid(tickerDF):
 #fetch_ticker('AAPL')
 
 # 2nd func
-# day1 = datetime.datetime(2018, 3, 21)
-# day2 = datetime.datetime(2018, 1, 20)
+# day1 = '2018-03-25'
+# day2 = '2018-01-01'
 # get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
 
 # 3rd func
-#get_profit_for_ticker_in_range('AAPL', day2, day1)
+# get_profit_for_ticker_in_range('AAPL', day2, day1)
 
 # 4th func
-# get_p2v_for_ticker_in_range('AAPL', day2, day1)
+# get_p2v_for_ticker_in_range('GOOG', day2, day1)
 
