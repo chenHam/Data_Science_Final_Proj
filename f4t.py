@@ -12,7 +12,7 @@ import tickers_data as td
 start_date = '2018-03-20'
 end_date = '2018-03-22'
 ticker = 'msft'
-path = 'C:\\Users\\BBB\\Desktop'
+path = 'C:\\'
 file_name = 'test'
 file_type = 'JSON'
 
@@ -34,14 +34,26 @@ if file_type == 'CSV':
         df.to_csv(path + '.csv')
         print('save a json file in: ' + path + '.csv')
     except:
-        print('cant save a csv file')
+        try:
+            path = './'
+            path = os.path.join(path, file_name)
+            df.to_csv(path + '.csv')
+            print('path not exists, save the file in the local path')
+        except:
+            print('cant save a csv file')
 
 if file_type == 'JSON':
     try:
         df.to_json(path + '.json', 'records', True)
         print('save a json file in:' + path + '.json')
     except:
-        print('cant save a json file')
+        try:
+            path = './'
+            path = os.path.join(path, file_name)
+            df.to_csv(path + '.json')
+            print('path not permitted, save the file in the local path')
+        except:
+            print('cant save a json file')
 
 
 

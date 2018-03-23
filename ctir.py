@@ -44,7 +44,7 @@ def compare_ticks_in_range(from_date, to_date, ticker_names):
 
 
 # for debug
-start_date = datetime.datetime(2010, 3, 20)
+start_date = datetime.datetime(2018, 3, 20)
 end_date = datetime.datetime(2018, 1, 21)
 tickers_list = ['MSFT', 'AAPL']
 
