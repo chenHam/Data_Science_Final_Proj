@@ -124,13 +124,13 @@ def check_df_valid(tickerDF):
 #fetch_ticker('AAPL')
 
 # 2nd func
-day1 = datetime.datetime(2018, 3, 21)
-day2 = datetime.datetime(2018, 1, 20)
+# day1 = datetime.datetime(2018, 3, 21)
+# day2 = datetime.datetime(2018, 1, 20)
 # get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
 
 # 3rd func
 #get_profit_for_ticker_in_range('AAPL', day2, day1)
 
 # 4th func
-get_p2v_for_ticker_in_range('AAPL', day2, day1)
+# get_p2v_for_ticker_in_range('AAPL', day2, day1)
 
