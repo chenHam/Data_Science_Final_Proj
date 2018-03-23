@@ -87,4 +87,4 @@ def check_df_valid(tickerDF):
 day1 = datetime.datetime(2018, 3, 21)
 day2 = datetime.datetime(2018, 3, 20)
 
-get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])
+# get_data_for_ticker_in_range('AAPL', day2, day1, ['close', 'open'])

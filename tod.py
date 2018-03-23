@@ -1,40 +1,45 @@
 import pandas as pd
-import os
-from tickers_data import  fetch_ticker
-import pandasql as pdsql
+from tickers_data import fetch_ticker
+from tickers_data import get_data_for_ticker_in_range
 
 # date = input('Please Enter date (Format : yyyy-mm-dd)')
 # tickers = input('Please Enter list of tickers')
 
 # for debug:
-date = '1990-11-12'
-tickers = 'blo,go,fr'
+date = '2018-03-22'
+tickers = 'msft'
 
 ticker_date = pd.to_datetime(date)
-print(str(ticker_date))
 tickers_list = str.split(tickers, ',')
 
+yesterday = ticker_date + pd.DateOffset(-1)
 
 # for each ticker from list
 for ticker in tickers_list:
     print(ticker)
-    fetch_ticker(ticker)
+    try:
+        fetch_ticker(ticker)
+    except:
+        print('The ticker : %s not exists', ticker)
+        continue
+    data_type = ['timestamp', 'close']
+    try:
+        df = get_data_for_ticker_in_range(ticker, yesterday, ticker_date, data_type)
+    except:
+        print('date not exists')
+    print(df)
 
-    # read csv file to dataframe
-    ticker_file = ticker + '.csv'
-    # df = pd.read_csv(os.path.join('data', ticker_file))
-    # for debug :
-    df = pd.read_csv('goog.csv')
+    close_yesterday = df.loc[df['timestamp'] == yesterday, ['close']]
+    close_today = df.loc[df['timestamp'] == ticker_date, ['close']]
 
-    yesterday = str(ticker_date + pd.DateOffset(-1))
-    yesterday_date = yesterday.split(' ')[0]
-    # print(yesterday_date)
+    profit = close_today - close_yesterday
 
-    query = 'select close from df where timestamp = '
-    close_yesterday = pdsql.sqldf(query + yesterday_date)
-    close_today = pdsql.sqldf(query + date)
-    print(close_yesterday)
-    print(close_today)
+    print('ticker name : %s , close price : %s , profit : %s', ticker, close_yesterday, profit)
+
+
+
+
+
 
 
 
