@@ -23,7 +23,8 @@ try:
     df = get_data_for_ticker_in_range(ticker, start_date, end_date, data_type)
 except:
     print('date not exists')
-print(df)
+
+# print(df)
 
 if not os.path.exists(path):
     print('path not exists, save the file in the local path')
@@ -33,12 +34,14 @@ path = os.path.join(path, file_name)
 if file_type == 'CSV':
     try:
         df.to_csv(path + '.csv')
+        print('save a json file in: ' + path + '.csv')
     except:
         print('cant save a csv file')
 
 if file_type == 'JSON':
     try:
         df.to_json(path + '.json', 'records', True)
+        print('save a json file in:' + path + '.json')
     except:
         print('cant save a json file')
 

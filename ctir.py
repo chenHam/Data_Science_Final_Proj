@@ -1,8 +1,6 @@
 import pandas as pd
 import datetime
-
 import tickers_data as td
-
 
 
 def compare_ticks_in_range(from_date, to_date, ticker_names):
@@ -49,4 +47,4 @@ tickers_list = ['MSFT', 'AAPL']
 # end_date = pd.to_datetime(end_date)
 # tickers_list = str.split(tickers, ',')
 
-compare_ticks_in_range(start_date, end_date, tickers_list)
+compare_ticks_in_range(end_date, start_date, tickers_list)

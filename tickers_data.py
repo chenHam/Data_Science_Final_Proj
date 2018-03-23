@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from pathlib import Path
-import datetime
 
 # constant string values
 directoryName = 'data'
@@ -9,10 +8,11 @@ apiKey = '4YDREM9NQ9TXEHYE';
 baseRequestString = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&' \
                     'symbol={0}&outputsize={1}&apikey={2}&datatype=csv'
 
+
 # params: ticker_name and time range(default = ''),
 # if time range is 'full': gets all historical data, otherwise gets previous 100 days
 # if data already exists, doesn't fetch it again
-def fetch_ticker(ticker_name,timerange=''):
+def fetch_ticker(ticker_name, timerange=''):
     if not Path(pathOfTicker(ticker_name)).exists():
         # default range value
         range = 'compact'
@@ -22,20 +22,21 @@ def fetch_ticker(ticker_name,timerange=''):
             range = 'full'
 
         # format base string to formatted string with the given params
-        formattedAPIUrl = baseRequestString.format(ticker_name, range, apiKey)
+        formatted_api_url = baseRequestString.format(ticker_name, range, apiKey)
 
         # read csv from the url, using pandas
-        tickerDF = pd.read_csv(formattedAPIUrl)
+        ticker_df = pd.read_csv(formatted_api_url)
 
-        if check_df_valid(tickerDF):
+        if check_df_valid(ticker_df):
 
             # save the data frame to csv file in the data directory
-            save_ticker_data_file(ticker_name, tickerDF)
+            save_ticker_data_file(ticker_name, ticker_df)
         else:
             raise Exception('Error fetching ticker: ' + ticker_name +', ticker does not exists.')
 
+
 # returns data for the given ticker_name, time range, data_type (=columns to read)
-def get_data_for_ticker_in_range(ticker_name,from_date,to_date, data_type):
+def get_data_for_ticker_in_range(ticker_name, from_date, to_date, data_type):
     # get path to ticker
     tickerPath = pathOfTicker(ticker_name)
 
@@ -58,8 +59,7 @@ def get_data_for_ticker_in_range(ticker_name,from_date,to_date, data_type):
     return in_range_df[data_type]
 
 
-def get_profit_for_ticker_in_range(ticker_name,from_date,to_date,
-accumulated=False):
+def get_profit_for_ticker_in_range(ticker_name, from_date, to_date, accumulated=False):
     in_range_df = get_data_for_ticker_in_range(ticker_name, from_date, to_date, ['timestamp', 'close'])
     in_range_df['ticker_name'] = ticker_name.upper()
     in_range_df['daily_profit'] = in_range_df['close'] / in_range_df['close'].shift(1)
@@ -68,7 +68,7 @@ accumulated=False):
     if accumulated:
         in_range_df['daily_profit'] = in_range_df['daily_profit'].cumsum()
 
-    print(in_range_df[['timestamp', 'ticker_name', 'daily_profit']])
+    # print(in_range_df[['timestamp', 'ticker_name', 'daily_profit']])
 
     # return only the required columns
     return in_range_df[['timestamp', 'ticker_name', 'daily_profit']]
@@ -78,14 +78,14 @@ accumulated=False):
 def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
     in_range_df = get_data_for_ticker_in_range(ticker_name, from_date, to_date, ['timestamp', 'close'])
 
-    print(in_range_df)
-    print(in_range_df['close'].max())
-    print(in_range_df['close'].idxmax())
+    # print(in_range_df)
+    # print(in_range_df['close'].max())
+    # print(in_range_df['close'].idxmax())
     peak_close = in_range_df['close'].max()
     peak_close_idx = in_range_df['close'].idxmax()
 
     after_peak_df = in_range_df[:peak_close_idx]
-    print(after_peak_df)
+    # print(after_peak_df)
 
     valley_close = after_peak_df['close'].min()
     valley_close_idx = after_peak_df['close'].idxmin()
@@ -93,11 +93,11 @@ def get_p2v_for_ticker_in_range(ticker_name,from_date,to_date):
 
     day_diff = peak_close_idx - valley_close_idx
 
-    print('peakClose: ' + str(peak_close))
-    print('peakCloseIdx: ' + str(peak_close_idx))
-    print('valleyClose: ' + str(valley_close))
-    print('valleyCloseIdx: ' + str(valley_close_idx))
-    print('dayDiff: ' + str(day_diff))
+    # print('peakClose: ' + str(peak_close))
+    # print('peakCloseIdx: ' + str(peak_close_idx))
+    # print('valleyClose: ' + str(valley_close))
+    # print('valleyCloseIdx: ' + str(valley_close_idx))
+    # print('dayDiff: ' + str(day_diff))
 
     peak_to_valley = peak_close - valley_close
 
