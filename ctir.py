@@ -7,7 +7,12 @@ def compare_ticks_in_range(from_date, to_date, ticker_names):
     result_list = []
 
     for ticker in ticker_names:
-        in_range_df = td.get_data_for_ticker_in_range(ticker, from_date, to_date, ['close'])
+        try:
+            in_range_df = td.get_data_for_ticker_in_range(ticker, from_date, to_date, ['close'])
+        except Exception as e:
+            print(str(e))
+            continue
+
         total_profit = in_range_df['close'].head(1).values[0] - in_range_df['close'].tail(1).values[0]
 
         peak_to_valley, peak, valley, day_diff = td.get_p2v_for_ticker_in_range(ticker, from_date, to_date)
@@ -31,20 +36,25 @@ def compare_ticks_in_range(from_date, to_date, ticker_names):
                                       'mean',
                                       'standard_deviation'])
 
-    print('result')
-    print(result_df)
+    print('result:')
+    if result_df.empty:
+        print('There in no result for the given parameters')
+    else:
+        print(result_df)
+
 
 # for debug
-start_date = datetime.datetime(2018, 3, 20)
+start_date = datetime.datetime(2010, 3, 20)
 end_date = datetime.datetime(2018, 1, 21)
 tickers_list = ['MSFT', 'AAPL']
 
 # start_date = input('Please enter start date (Format : yyyy-mm-dd)')
 # end_date = input('Please enter end date (Format : yyyy-mm-dd)')
-# tickers = input('Please enter list of tickers').upper()
+# tickers = input('Please enter list of tickers(seprated by commas) ').upper()
 #
 # start_date = pd.to_datetime(start_date)
 # end_date = pd.to_datetime(end_date)
+# tickers = tickers.replace(' ', '')
 # tickers_list = str.split(tickers, ',')
 
 compare_ticks_in_range(end_date, start_date, tickers_list)
