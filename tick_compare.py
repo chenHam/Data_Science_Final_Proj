@@ -8,22 +8,24 @@ import numpy as np
 
 # gets time range, tickers and data_type to compare by
 def tick_compare(from_date, to_date, ticker_names, data_type):
-
     # dataframe that will contains the data for all of tickers
     result_df = pd.DataFrame(columns=['ticker_name', 'timestamp', data_type])
 
     # foreach ticker
     for ticker in ticker_names:
-        # for the current ticker -
-            # get the data in range (columns are the given data_type and the timestamp for plot)
-        tickerDF = td.get_data_for_ticker_in_range(ticker, from_date, to_date, [data_type, 'timestamp'])
+        try:
+            # for the current ticker -
+                # get the data in range (columns are the given data_type and the timestamp for plot)
+            tickerDF = td.get_data_for_ticker_in_range(ticker, from_date, to_date, [data_type, 'timestamp'])
+        except Exception as e:
+            print(str(e))
+            continue
 
         # add column for the ticker_name and fill it with the current ticker
         tickerDF['ticker_name'] = ticker
 
         # add tickerDF to the result dataframe
         result_df = result_df.append(tickerDF)
-
 
     # plot the result_dataframe
     plot_tickers_df(result_df, data_type)
