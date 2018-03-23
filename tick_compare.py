@@ -1,26 +1,27 @@
 import tickers_data as td
 import datetime
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
-import numpy as np
-# %matplotlib inline
+
 
 def tick_compare(from_date, to_date, ticker_names, data_type):
     result_df = pd.DataFrame(columns=['ticker_name', 'timestamp', data_type])
 
     for ticker in ticker_names:
-        tickerDF = td.get_data_for_ticker_in_range(ticker, from_date, to_date, [data_type, 'timestamp'])
+        try:
+            ticker_df = td.get_data_for_ticker_in_range(ticker, from_date, to_date, [data_type, 'timestamp'])
+        except Exception as e:
+            print(str(e))
+            continue
 
-        tickerDF = tickerDF[['timestamp', data_type]]
-        tickerDF['ticker_name'] = ticker
+        ticker_df = ticker_df[['timestamp', data_type]]
+        ticker_df['ticker_name'] = ticker
 
-        result_df = result_df.append(tickerDF)
+        result_df = result_df.append(ticker_df)
 
     print(result_df)
 
     plot_tickers_df(result_df)
-
 
     result_df.plot(x='timestamp', y='close')
 
@@ -37,6 +38,7 @@ def plot_tickers_df(df):
 
     plt.show()
 
+
 # for debug
 end_date = datetime.datetime(2018, 3, 21)
 start_date = datetime.datetime(2018, 1, 20)
@@ -52,5 +54,5 @@ tickers_list = ['MSFT', 'AAPL', 'GOOG']
 # end_date = pd.to_datetime(end_date)
 # tickers_list = str.split(tickers, ',')
 
-tick_compare(end_date, start_date, tickers_list, data_type)
+tick_compare(start_date, end_date, tickers_list, data_type)
 
