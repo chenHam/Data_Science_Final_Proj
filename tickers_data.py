@@ -99,6 +99,7 @@ def get_profit_for_ticker_in_range(ticker_name, from_date_str, to_date_str, accu
     # returns only the required columns
     return in_range_df[['timestamp', 'ticker_name', profit_type]]
 
+
 # params: ticker_name, time range
 # return: peak_to_valley, peak, valley
 def get_p2v_for_ticker_in_range(ticker_name, from_date, to_date):
@@ -136,6 +137,7 @@ def get_p2v_for_ticker_in_range(ticker_name, from_date, to_date):
     # return the calculated values
     return peak_to_valley, peak_close, valley_close, day_diff
 
+
 # gets ticker_name and dataframe
 # creates a csv file with the ticker_name from the data frame
 def save_ticker_data_file(ticker_name, df):
@@ -145,6 +147,7 @@ def save_ticker_data_file(ticker_name, df):
 
     # save the dataframe as csv to data directory
     df.to_csv(pathOfTicker(ticker_name), index=False)
+
 
 # return 'data/TICKER_NAME.csv'
 def pathOfTicker(ticker_name):
