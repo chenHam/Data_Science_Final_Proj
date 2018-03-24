@@ -43,18 +43,23 @@ def compare_ticks_in_range(from_date, to_date, ticker_names):
         print(result_df)
 
 
-# for debug
-start_date = datetime.datetime(2018, 3, 20)
-end_date = datetime.datetime(2018, 1, 21)
-tickers_list = ['MSFT', 'AAPL']
+if __name__ == "__main__":
+    # stuff only to run when not called via 'import' here
 
-# start_date = input('Please enter start date (Format : yyyy-mm-dd)')
-# end_date = input('Please enter end date (Format : yyyy-mm-dd)')
-# tickers = input('Please enter list of tickers(seprated by commas) ').upper()
-#
-# start_date = pd.to_datetime(start_date)
-# end_date = pd.to_datetime(end_date)
-# tickers = tickers.replace(' ', '')
-# tickers_list = str.split(tickers, ',')
+    # for debug
+    start_date = datetime.datetime(2018, 1, 20)
+    end_date = datetime.datetime(2018, 3, 21)
+    tickers_list = ['MSFT', 'AAPL']
 
-compare_ticks_in_range(end_date, start_date, tickers_list)
+    # start_date = input('Please enter start date (Format : yyyy-mm-dd)')
+    # end_date = input('Please enter end date (Format : yyyy-mm-dd)')
+    # tickers = input('Please enter list of tickers(seprated by commas) ').upper()
+    #
+    # start_date = pd.to_datetime(start_date)
+    # end_date = pd.to_datetime(end_date)
+    # tickers = tickers.replace(' ', '')
+    # tickers_list = str.split(tickers, ',')
+
+    compare_ticks_in_range(start_date, end_date, tickers_list)
+
+

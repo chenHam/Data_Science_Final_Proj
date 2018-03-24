@@ -3,6 +3,7 @@ import datetime
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import ctir
 import numpy as np
 # %matplotlib inline
 
@@ -63,7 +64,9 @@ tickers_list = ['MSFT', 'AAPL', 'NVDA', 'AABA']
 #
 # start_date = pd.to_datetime(start_date)
 # end_date = pd.to_datetime(end_date)
+# tickers = tickers.replace(' ', '')
 # tickers_list = str.split(tickers, ',')
 
 tick_compare(start_date, end_date, tickers_list, data_type)
+ctir.compare_ticks_in_range(start_date, end_date, tickers_list)
 
