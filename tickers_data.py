@@ -17,7 +17,7 @@ def fetch_ticker(ticker_name, timerange=''):
     # to lower case
     timerange = timerange.lower()
 
-    if not Path(pathOfTicker(ticker_name)).exists():
+    if not Path(path_of_ticker(ticker_name)).exists():
         # default range value
         range = 'compact'
 
@@ -50,7 +50,7 @@ def get_data_for_ticker_in_range(ticker_name, from_date_str, to_date_str, data_t
         raise Exception('Invalid date or date format')
 
     # get path to ticker
-    tickerPath = pathOfTicker(ticker_name)
+    tickerPath = path_of_ticker(ticker_name)
 
     # if data for the ticker does not exist, fetch it
     if not Path(tickerPath).exists():
@@ -149,12 +149,13 @@ def save_ticker_data_file(ticker_name, df):
         Path(directoryName).mkdir()
 
     # save the dataframe as csv to data directory
-    df.to_csv(pathOfTicker(ticker_name), index=False)
+    df.to_csv(path_of_ticker(ticker_name), index=False)
 
 
 # return 'data/TICKER_NAME.csv'
-def pathOfTicker(ticker_name):
+def path_of_ticker(ticker_name):
     return os.path.join(directoryName, ticker_name.upper() + '.csv')
+
 
 # return if dataframe containing error message
 def check_df_valid(tickerDF):
