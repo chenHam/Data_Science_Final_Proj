@@ -63,21 +63,21 @@ def plot_tickers_df(df, data_type):
     plt.show()
 
 # for debug
-end_date = datetime.datetime(2018, 2, 23)
-start_date = datetime.datetime(2018, 1, 15)
-data_type = 'Daily_profit_accu'
-tickers_list = ['MSFT', 'AAPL', 'NVDA', 'AABA']
+# end_date = datetime.datetime(2018, 2, 23)
+# start_date = datetime.datetime(2018, 1, 15)
+# data_type = 'Daily_profit_accu'
+# tickers_list = ['MSFT', 'AAPL', 'NVDA', 'AABA']
 
 
-# start_date = input('Please enter start date (Format : yyyy-mm-dd)')
-# end_date = input('Please enter end date (Format : yyyy-mm-dd)')
-# tickers = input('Please enter list of tickers (seprated by commas)').upper()
-# data_type = input('Please enter one data_type (daily_profit, daily_profit_accu, high, low, close)').lower()
-#
-# start_date = pd.to_datetime(start_date)
-# end_date = pd.to_datetime(end_date)
-# tickers = tickers.replace(' ', '')
-# tickers_list = str.split(tickers, ',')
+start_date = input('Please enter start date (Format : yyyy-mm-dd)')
+end_date = input('Please enter end date (Format : yyyy-mm-dd)')
+tickers = input('Please enter list of tickers (seprated by commas)').upper()
+data_type = input('Please enter one data_type (daily_profit, daily_profit_accu, high, low, close)').lower()
+
+start_date = pd.to_datetime(start_date)
+end_date = pd.to_datetime(end_date)
+tickers = tickers.replace(' ', '')
+tickers_list = str.split(tickers, ',')
 
 tick_compare(start_date, end_date, tickers_list, data_type)
 ctir.compare_ticks_in_range(start_date, end_date, tickers_list)

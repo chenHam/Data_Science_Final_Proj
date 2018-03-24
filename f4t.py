@@ -1,20 +1,20 @@
 import os
 import tickers_data as td
 
-# start_date = input('Please enter start date (Format : yyyy-mm-dd) ').upper()
-# end_date = input('Please enter end date (Format : yyyy-mm-dd) ')
-# ticker = input('Please enter ticker name ').upper()
-# path = input('Please enter the path of the file ')
-# file_name = input('Please enter the name of the file ').upper()
-# file_type = input('Please enter the format of the file (csv \ json) ').upper()
+start_date = input('Please enter start date (Format : yyyy-mm-dd) ').upper()
+end_date = input('Please enter end date (Format : yyyy-mm-dd) ')
+ticker = input('Please enter ticker name ').upper()
+path = input('Please enter the path of the file ')
+file_name = input('Please enter the name of the file ').upper()
+file_type = input('Please enter the format of the file (csv \ json) ').upper()
 
 # for debug
-start_date = '2018-03-20'
-end_date = '2018-03-22'
-ticker = 'msft'
-path = 'C:\\'
-file_name = 'test'
-file_type = 'JSON'
+# start_date = '2018-03-20'
+# end_date = '2018-03-22'
+# ticker = 'msft'
+# path = 'C:\\'
+# file_name = 'test'
+# file_type = 'JSON'
 
 data_type = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
 

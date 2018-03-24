@@ -2,12 +2,12 @@ import pandas as pd
 from datetime import datetime, timedelta
 import tickers_data as td
 
-# date = input('Please Enter date (Format : yyyy-mm-dd)')
-# tickers = input('Please Enter list of tickers (seprated by commas) ').upper()
+date = input('Please Enter date (Format : yyyy-mm-dd)')
+tickers = input('Please Enter list of tickers (seprated by commas) ').upper()
 
 # for debug:
-date = '2018-03-22'
-tickers = 'msft,goog   ,7658'
+# date = '2018-03-22'
+# tickers = 'msft,goog   ,7658'
 
 ticker_date = pd.to_datetime(date)
 tickers = tickers.replace(' ', '')
