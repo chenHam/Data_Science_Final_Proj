@@ -10,6 +10,9 @@ from ctir import compare_ticks_in_range
 
 # gets time range, tickers and data_type to compare by
 def tick_compare(from_date, to_date, ticker_names, data_type):
+    # convert to lower case
+    data_type = data_type.lower()
+
     # dataframe that will contain the data for all of tickers
     result_df = pd.DataFrame(columns=['ticker_name', 'timestamp', data_type])
 
@@ -64,7 +67,7 @@ def plot_tickers_df(df, data_type):
 # for debug
 end_date = datetime.datetime(2018, 2, 23)
 start_date = datetime.datetime(2018, 1, 15)
-data_type = 'daily_profit_accu'
+data_type = 'Daily_profit_accu'
 tickers_list = ['MSFT', 'AAPL', 'NVDA', 'AABA']
 
 
