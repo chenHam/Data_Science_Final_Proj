@@ -14,6 +14,9 @@ baseRequestString = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAIL
 # if time range is 'full': gets all historical data, otherwise gets previous 100 days
 # if data already exists, doesn't fetch it again
 def fetch_ticker(ticker_name, timerange=''):
+    # to lower case
+    timerange = timerange.lower()
+
     if not Path(pathOfTicker(ticker_name)).exists():
         # default range value
         range = 'compact'
