@@ -37,12 +37,17 @@ for ticker in tickers_list:
         print(str(e))
         continue
 
-    close_yesterday = df.loc[df['timestamp'] == yesterday, 'close'].values[0]
-    close_today = df.loc[df['timestamp'] == ticker_date, 'close'].values[0]
+    # check if data is available for the given ticker and date
+    if len(df.loc[df['timestamp'] == yesterday, 'close'].values) > 0 and \
+       len(df.loc[df['timestamp'] == ticker_date, 'close'].values) > 0:
+        close_yesterday = df.loc[df['timestamp'] == yesterday, 'close'].values[0]
+        close_today = df.loc[df['timestamp'] == ticker_date, 'close'].values[0]
+        profit = close_today - close_yesterday
 
-    profit = close_today - close_yesterday
+        print("ticker name : {0} , close price : {1} , profit : {2}".format(ticker, str(close_yesterday), str(profit)))
+    else:
+        print('no data for the given date and ticker')
 
-    print("ticker name : {0} , close price : {1} , profit : {2}".format(ticker, str(close_yesterday), str(profit)))
 
 
 
