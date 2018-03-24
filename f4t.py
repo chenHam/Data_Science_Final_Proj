@@ -1,7 +1,7 @@
 import os
 import tickers_data as td
 
-start_date = input('Please enter start date (Format : yyyy-mm-dd) ').upper()
+start_date = input('Please enter start date (Format : yyyy-mm-dd) ')
 end_date = input('Please enter end date (Format : yyyy-mm-dd) ')
 ticker = input('Please enter ticker name ').upper()
 path = input('Please enter the path of the file ')
