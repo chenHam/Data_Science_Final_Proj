@@ -1,12 +1,10 @@
 import tickers_data as td
 import datetime
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 import ctir
-import numpy as np
 from ctir import compare_ticks_in_range
-# %matplotlib inline
+
 
 # gets time range, tickers and data_type to compare by
 def tick_compare(from_date, to_date, ticker_names, data_type):
@@ -68,11 +66,10 @@ data_type = 'daily_profit_accu'
 tickers_list = ['MSFT', 'AAPL', 'NVDA', 'AABA']
 
 
-
 # start_date = input('Please enter start date (Format : yyyy-mm-dd)')
 # end_date = input('Please enter end date (Format : yyyy-mm-dd)')
 # tickers = input('Please enter list of tickers (seprated by commas)').upper()
-# data_type = input('Please enter one data_type (timestamp,open,high,low,close,volume)').upper()
+# data_type = input('Please enter one data_type (daily_profit, daily_profit_accu, high, low, close)').lower()
 #
 # start_date = pd.to_datetime(start_date)
 # end_date = pd.to_datetime(end_date)

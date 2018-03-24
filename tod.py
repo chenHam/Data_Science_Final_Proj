@@ -6,7 +6,7 @@ import tickers_data as td
 # tickers = input('Please Enter list of tickers (seprated by commas) ').upper()
 
 # for debug:
-date = '2017-03-22'
+date = '2018-03-22'
 tickers = 'msft,goog   ,7658'
 
 ticker_date = pd.to_datetime(date)
