@@ -44,9 +44,9 @@ def compare_ticks_in_range(from_date, to_date, ticker_names):
 
 
 # for debug
-start_date = datetime.datetime(2018, 3, 20)
-end_date = datetime.datetime(2018, 1, 21)
-tickers_list = ['MSFT', 'AAPL']
+# start_date = datetime.datetime(2018, 3, 20)
+# end_date = datetime.datetime(2018, 1, 21)
+# tickers_list = ['MSFT', 'AAPL']
 
 # start_date = input('Please enter start date (Format : yyyy-mm-dd)')
 # end_date = input('Please enter end date (Format : yyyy-mm-dd)')
@@ -57,4 +57,4 @@ tickers_list = ['MSFT', 'AAPL']
 # tickers = tickers.replace(' ', '')
 # tickers_list = str.split(tickers, ',')
 
-compare_ticks_in_range(end_date, start_date, tickers_list)
+# compare_ticks_in_range(end_date, start_date, tickers_list)

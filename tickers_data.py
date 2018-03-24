@@ -65,10 +65,16 @@ def get_data_for_ticker_in_range(ticker_name, from_date_str, to_date_str, data_t
     if in_range_df.empty or not set(data_type).issubset(tickerDF.columns):
         raise Exception('Invalid parameters, or no data in the given range')
 
+    # refresh index column of the partial dataframe
+    in_range_df = in_range_df.reset_index(drop=True)
+
     return in_range_df[data_type]
 
 
 def get_profit_for_ticker_in_range(ticker_name, from_date_str, to_date_str, accumulated=False):
+    # default profit not accumulated
+    profit_type = 'daily_profit'
+
     # try converting dates to datetime type, raise exception on failure
     try:
         from_date = pd.to_datetime(from_date_str)
@@ -87,10 +93,11 @@ def get_profit_for_ticker_in_range(ticker_name, from_date_str, to_date_str, accu
 
     # if accumulated profit is required
     if accumulated:
-        in_range_df['daily_profit'] = in_range_df['daily_profit'].cumsum()
+        in_range_df['daily_profit_accu'] = in_range_df['daily_profit'].cumsum()
+        profit_type = 'daily_profit_accu'
 
     # returns only the required columns
-    return in_range_df[['timestamp', 'ticker_name', 'daily_profit']]
+    return in_range_df[['timestamp', 'ticker_name', profit_type]]
 
 # params: ticker_name, time range
 # return: peak_to_valley, peak, valley
@@ -115,8 +122,10 @@ def get_p2v_for_ticker_in_range(ticker_name, from_date, to_date):
     valley_close_idx = after_peak_df['close'].idxmin()
 
     # calculates the day difference between the peak and the valley
-    valley_date = after_peak_df['timestamp'].values[valley_close_idx]
-    peak_date = after_peak_df['timestamp'].values[peak_close_idx]
+    # valley_date = after_peak_df['timestamp'].values[valley_close_idx]
+    # peak_date = after_peak_df['timestamp'].values[peak_close_idx]
+    valley_date = in_range_df['timestamp'].values[valley_close_idx]
+    peak_date = in_range_df['timestamp'].values[peak_close_idx]
 
     # convert datetimedelta to days integer
     day_diff = (valley_date - peak_date) / np.timedelta64(1, 'D')

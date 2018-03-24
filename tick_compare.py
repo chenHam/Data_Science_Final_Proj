@@ -4,19 +4,27 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from ctir import compare_ticks_in_range
 # %matplotlib inline
 
 # gets time range, tickers and data_type to compare by
 def tick_compare(from_date, to_date, ticker_names, data_type):
-    # dataframe that will contains the data for all of tickers
+    # dataframe that will contain the data for all of tickers
     result_df = pd.DataFrame(columns=['ticker_name', 'timestamp', data_type])
 
     # foreach ticker
     for ticker in ticker_names:
         try:
             # for the current ticker -
+
+            if data_type in ('close', 'high', 'low'):
                 # get the data in range (columns are the given data_type and the timestamp for plot)
-            tickerDF = td.get_data_for_ticker_in_range(ticker, from_date, to_date, [data_type, 'timestamp'])
+                tickerDF = td.get_data_for_ticker_in_range(ticker, from_date, to_date, [data_type, 'timestamp'])
+            elif data_type == 'daily_profit':
+                tickerDF = td.get_profit_for_ticker_in_range(ticker,from_date, to_date, accumulated=False)
+            elif data_type == 'daily_profit_accu':
+                tickerDF = td.get_profit_for_ticker_in_range(ticker, from_date, to_date, accumulated=True)
+
         except Exception as e:
             print(str(e))
             continue
@@ -30,9 +38,11 @@ def tick_compare(from_date, to_date, ticker_names, data_type):
     # plot the result_dataframe
     plot_tickers_df(result_df, data_type)
 
+    # print table comparing tickers using ctir's compare_ticks_in_range function
+    compare_ticks_in_range(from_date, to_date, ticker_names)
+
 
 # gets df containing tickers and field to compare by, draws chart to compare them
-
 def plot_tickers_df(df, data_type):
     # set index for the timestamp
     df = df.set_index('timestamp')
@@ -51,10 +61,12 @@ def plot_tickers_df(df, data_type):
     plt.show()
 
 # for debug
-end_date = datetime.datetime(2018, 3, 21)
-start_date = datetime.datetime(2018, 1, 1)
-data_type = 'close'
+end_date = datetime.datetime(2018, 2, 23)
+start_date = datetime.datetime(2018, 1, 15)
+data_type = 'daily_profit_accu'
 tickers_list = ['MSFT', 'AAPL', 'NVDA', 'AABA']
+
+
 
 # start_date = input('Please enter start date (Format : yyyy-mm-dd)')
 # end_date = input('Please enter end date (Format : yyyy-mm-dd)')
